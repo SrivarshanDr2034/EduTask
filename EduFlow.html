@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>EduFlow — Your academic command centre</title>
+  <link rel="stylesheet" href="EduFlow.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="EduFlow home">
+        <span class="brand-mark" aria-hidden="true">e</span>
+        <span>edu<span class="brand-light">flow</span></span>
+      </a>
+
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="main-nav">
+        <a class="nav-link active" href="#overview"><span class="nav-icon" aria-hidden="true">◫</span>Overview</a>
+        <a class="nav-link" href="#assignments"><span class="nav-icon" aria-hidden="true">▤</span>Assignments<span class="nav-count" id="nav-task-count">0</span></a>
+        <a class="nav-link" href="#schedule"><span class="nav-icon" aria-hidden="true">▦</span>Calendar</a>
+        <a class="nav-link" href="#progress"><span class="nav-icon" aria-hidden="true">◷</span>Progress</a>
+        <a class="nav-link" href="#gmail"><span class="nav-icon" aria-hidden="true">✉</span>Study email</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="focus-card">
+          <span class="focus-spark" aria-hidden="true">✦</span>
+          <p class="focus-title">Small steps add up.</p>
+          <p class="focus-copy">A little progress each day leads to big results.</p>
+          <div class="focus-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="profile">
+          <div class="avatar" aria-hidden="true">JD</div>
+          <div class="profile-text"><strong>Jamie Davis</strong><span>Student</span></div>
+          <span class="profile-menu" aria-hidden="true">···</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <div class="breadcrumb">Workspace <span>/</span> Overview</div>
+        <div class="topbar-actions">
+          <span class="today-label" id="today-label"></span>
+          <button class="icon-button notification-button" type="button" aria-label="Notifications">
+            <span aria-hidden="true">♧</span><i></i>
+          </button>
+          <button class="avatar top-avatar" type="button" aria-label="Jamie Davis profile">JD</button>
+        </div>
+      </header>
+      <p class="app-notice" id="app-notice" role="status" hidden></p>
+
+      <section class="welcome-row">
+        <div>
+          <p class="eyebrow">YOUR LEARNING, IN FLOW</p>
+          <h1>Good morning, Jamie <span class="wave" aria-hidden="true">✦</span></h1>
+          <p class="welcome-copy">A fresh day to make progress. Here's what's on your plate.</p>
+        </div>
+        <button class="primary-button" id="add-assignment-button" type="button"><span aria-hidden="true">＋</span> Add assignment</button>
+      </section>
+
+      <section class="stats-grid" aria-label="Study overview">
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-label">Due today</span><span class="stat-icon icon-violet" aria-hidden="true">◷</span></div>
+          <div class="stat-value" id="due-today-count">0</div>
+          <div class="stat-foot"><span class="stat-dot dot-violet"></span><span>Keep your momentum going</span></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-label">Upcoming</span><span class="stat-icon icon-blue" aria-hidden="true">▤</span></div>
+          <div class="stat-value" id="upcoming-count">0</div>
+          <div class="stat-foot"><span class="stat-dot dot-blue"></span><span>Assignments to work on</span></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-label">Completed</span><span class="stat-icon icon-green" aria-hidden="true">✓</span></div>
+          <div class="stat-value" id="completed-count">0</div>
+          <div class="stat-foot"><span class="stat-dot dot-green"></span><span>Tasks finished so far</span></div>
+        </article>
+        <article class="stat-card progress-stat">
+          <div class="stat-top"><span class="stat-label">Overall progress</span><span class="stat-icon icon-orange" aria-hidden="true">↗</span></div>
+          <div class="stat-value"><span id="progress-percent">0</span><small>%</small></div>
+          <div class="progress-track"><span id="progress-bar"></span></div>
+        </article>
+      </section>
+
+      <div class="content-grid">
+        <section class="panel assignments-panel" id="assignments">
+          <div class="panel-heading">
+            <div><h2>My assignments</h2><p class="panel-subtitle">Stay on top of what matters</p></div>
+            <a class="text-link" href="#assignments" id="view-all-link">View all <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="task-toolbar">
+            <div class="filter-tabs" role="group" aria-label="Filter assignments">
+              <button class="filter-tab selected" type="button" data-filter="all">All <span id="all-filter-count">0</span></button>
+              <button class="filter-tab" type="button" data-filter="pending">To do</button>
+              <button class="filter-tab" type="button" data-filter="completed">Completed</button>
+            </div>
+            <label class="sort-control">Sort:
+              <select id="sort-select" aria-label="Sort assignments">
+                <option value="date">Due date</option>
+                <option value="priority">Priority</option>
+                <option value="subject">Subject</option>
+              </select>
+            </label>
+          </div>
+          <div class="task-list" id="task-list" aria-live="polite"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <span aria-hidden="true">✦</span>
+            <strong>You're all caught up</strong>
+            <p>Add an assignment to start planning your work.</p>
+            <button class="text-link" id="empty-add-button" type="button">Add an assignment <span aria-hidden="true">→</span></button>
+          </div>
+        </section>
+
+        <aside class="right-column">
+          <section class="panel deadline-panel">
+            <div class="panel-heading">
+              <div><h2>Coming up</h2><p class="panel-subtitle">Your next deadlines</p></div>
+              <span class="heading-icon" aria-hidden="true">◷</span>
+            </div>
+            <div class="deadline-list" id="deadline-list"></div>
+          </section>
+
+          <section class="panel study-panel" id="progress">
+            <div class="study-heading">
+              <div><h2>Your study flow</h2><p class="panel-subtitle">A snapshot of your progress</p></div>
+              <span class="study-icon" aria-hidden="true">✦</span>
+            </div>
+            <div class="study-summary">
+              <div class="donut" id="progress-donut"><div><strong id="donut-percent">0%</strong><span>complete</span></div></div>
+              <div class="study-legend">
+                <div><i class="legend-dot legend-done"></i><span>Completed</span><strong id="legend-completed">0</strong></div>
+                <div><i class="legend-dot legend-pending"></i><span>In progress</span><strong id="legend-pending">0</strong></div>
+              </div>
+            </div>
+            <div class="study-tip"><span aria-hidden="true">✧</span><p><strong>Keep it up!</strong> Every completed task is a step closer to your goals.</p></div>
+          </section>
+
+          <section class="panel gmail-panel" id="gmail">
+            <div class="panel-heading">
+              <div><h2>Study emails</h2><p class="panel-subtitle">Recent school-related messages</p></div>
+              <span class="gmail-mark" aria-hidden="true">M</span>
+            </div>
+            <p class="gmail-privacy">Read-only access. EduFlow displays matching message senders, subjects and snippets; it never sends or changes email.</p>
+            <label class="field-label" for="gmail-client-id">Google OAuth Client ID</label>
+            <input class="gmail-client-input" id="gmail-client-id" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="...apps.googleusercontent.com" aria-describedby="gmail-help">
+            <p class="gmail-help" id="gmail-help">Client ID is public. Never enter a client secret here.</p>
+            <div class="gmail-actions">
+              <button class="primary-button gmail-connect" id="gmail-connect" type="button">Connect Gmail</button>
+              <button class="gmail-secondary" id="gmail-refresh" type="button" hidden>Refresh</button>
+              <button class="gmail-secondary" id="gmail-disconnect" type="button" hidden>Disconnect</button>
+            </div>
+            <p class="gmail-status" id="gmail-status" role="status" aria-live="polite">Not connected</p>
+            <div class="gmail-messages" id="gmail-messages" aria-live="polite"></div>
+          </section>
+        </aside>
+      </div>
+
+      <section class="panel schedule-panel" id="schedule">
+        <div class="panel-heading">
+          <div><h2>This week</h2><p class="panel-subtitle">A little structure goes a long way</p></div>
+          <a class="text-link" href="#schedule">Open calendar <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="week-strip" id="week-strip"></div>
+      </section>
+
+      <footer class="page-footer">Made for your next big thing <span aria-hidden="true">✦</span></footer>
+    </main>
+  </div>
+
+  <dialog class="assignment-dialog" id="assignment-dialog" aria-labelledby="dialog-title">
+    <form id="assignment-form">
+      <div class="dialog-heading"><div><p class="eyebrow">PLAN YOUR WORK</p><h2 id="dialog-title">Add assignment</h2></div><button class="dialog-close" type="button" id="close-dialog" aria-label="Close">×</button></div>
+      <label class="field-label" for="assignment-title">Assignment title</label>
+      <input id="assignment-title" name="title" maxlength="80" placeholder="e.g. Chapter 4 problem set" required>
+      <div class="field-row">
+        <div><label class="field-label" for="assignment-subject">Subject</label>
+          <select id="assignment-subject" name="subject" required>
+            <option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="Literature">Literature</option><option value="History">History</option><option value="Physics">Physics</option><option value="Other">Other</option>
+          </select>
+        </div>
+        <div><label class="field-label" for="assignment-due">Due date</label><input id="assignment-due" name="dueDate" type="date" required></div>
+      </div>
+      <label class="field-label" for="assignment-priority">Priority</label>
+      <select id="assignment-priority" name="priority"><option value="Medium">Medium</option><option value="High">High</option><option value="Low">Low</option></select>
+      <p class="form-error" id="form-error" role="alert"></p>
+      <button class="primary-button submit-button" type="submit">Save assignment <span aria-hidden="true">→</span></button>
+    </form>
+  </dialog>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const storageKey = "eduflow.assignments.v1";
+      const pendingSyncKey = "eduflow.assignments.pendingSync.v1";
+      const apiBaseUrl = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+        ? "http://127.0.0.1:8000"
+        : "";
+      const gmailClientStorageKey = "eduflow.google.clientId.v1";
+      const gmailScope = "https://www.googleapis.com/auth/gmail.readonly";
+      const gmailQuery = "newer_than:30d {school homework assignment classroom exam}";
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const dateKey = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      };
+      const offsetDate = (days) => {
+        const date = new Date(today);
+        date.setDate(date.getDate() + days);
+        return dateKey(date);
+      };
+      const initialAssignments = [
+        { id: "demo-math", title: "Chapter 4 problem set", subject: "Mathematics", dueDate: offsetDate(0), priority: "High", completed: false },
+        { id: "demo-bio", title: "Cell structure lab report", subject: "Biology", dueDate: offsetDate(1), priority: "Medium", completed: false },
+        { id: "demo-lit", title: "The Great Gatsby — reading notes", subject: "Literature", dueDate: offsetDate(2), priority: "Low", completed: false },
+        { id: "demo-history", title: "Industrial Revolution essay", subject: "History", dueDate: offsetDate(4), priority: "High", completed: false },
+        { id: "demo-physics", title: "Motion and forces quiz prep", subject: "Physics", dueDate: offsetDate(6), priority: "Medium", completed: true }
+      ];
+
+      let assignments = [];
+      let activeFilter = "all";
+      let apiAvailable = false;
+      let localRevision = 0;
+      let saveQueue = Promise.resolve();
+      const taskList = document.getElementById("task-list");
+      const deadlineList = document.getElementById("deadline-list");
+      const emptyState = document.getElementById("empty-state");
+      const dialog = document.getElementById("assignment-dialog");
+      const form = document.getElementById("assignment-form");
+      const gmailClientInput = document.getElementById("gmail-client-id");
+      const gmailStatus = document.getElementById("gmail-status");
+      const gmailMessages = document.getElementById("gmail-messages");
+      let gmailAccessToken = "";
+      let gmailTokenExpiresAt = 0;
+      let googleIdentityScriptPromise;
+
+      function showNotice(message) {
+        const notice = document.getElementById("app-notice");
+        notice.textContent = message;
+        notice.hidden = !message;
+      }
+
+      function readLocalAssignments() {
+        try {
+          const saved = localStorage.getItem(storageKey);
+          if (saved === null) return null;
+          const parsed = JSON.parse(saved);
+          if (!Array.isArray(parsed) || parsed.some((item) =>
+            !item || typeof item.id !== "string" || typeof item.title !== "string" ||
+            typeof item.subject !== "string" || typeof item.dueDate !== "string" ||
+            typeof item.priority !== "string" || typeof item.completed !== "boolean")) {
+            throw new Error("Saved assignments have an invalid format.");
+          }
+          return parsed;
+        } catch (error) {
+          console.error("Unable to load saved EduFlow assignments.", error);
+          showNotice("Saved browser assignments could not be read. The app will try the local database.");
+          return null;
+        }
+      }
+
+      function saveLocalAssignments(snapshot, pendingSync) {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(snapshot));
+          if (pendingSync) localStorage.setItem(pendingSyncKey, "true");
+          else localStorage.removeItem(pendingSyncKey);
+          return true;
+        } catch (error) {
+          console.error("Unable to save the EduFlow browser backup.", error);
+          showNotice("The browser backup could not be saved. Check available storage.");
+          return false;
+        }
+      }
+
+      async function replaceServerAssignments(snapshot) {
+        const response = await fetch(`${apiBaseUrl}/api/assignments`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(snapshot)
+        });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.detail || `Python API returned ${response.status}.`);
+        }
+        return response.json();
+      }
+
+      async function loadAssignments() {
+        const localAssignments = readLocalAssignments();
+        if (!apiBaseUrl) {
+          assignments = localAssignments || initialAssignments.slice();
+          saveLocalAssignments(assignments, false);
+          showNotice("This hosted version saves assignments only in this browser. They are not shared or synced between devices.");
+          return;
+        }
+        try {
+          const response = await fetch(`${apiBaseUrl}/api/assignments`);
+          if (!response.ok) throw new Error(`Python API returned ${response.status}.`);
+          const serverAssignments = await response.json();
+          const hasPendingSync = localStorage.getItem(pendingSyncKey) === "true";
+          apiAvailable = true;
+
+          if (hasPendingSync || serverAssignments.length === 0) {
+            const source = hasPendingSync && localAssignments ? localAssignments :
+              (localAssignments || initialAssignments);
+            assignments = await replaceServerAssignments(source);
+          } else {
+            assignments = serverAssignments;
+          }
+          saveLocalAssignments(assignments, false);
+          showNotice("Python backend connected. Assignments are stored in this device's local SQLite database; accounts and cloud sync are not set up yet.");
+        } catch (error) {
+          console.error("Unable to connect to the EduFlow Python API.", error);
+          apiAvailable = false;
+          assignments = localAssignments || initialAssignments.slice();
+          saveLocalAssignments(assignments, true);
+          showNotice("Python backend is offline. Changes are saved only in this browser for now; start the local API to sync them to SQLite.");
+        }
+      }
+
+      function saveAssignments() {
+        const snapshot = assignments.map((item) => ({ ...item }));
+        const revision = ++localRevision;
+        const savedLocally = saveLocalAssignments(snapshot, true);
+        if (!savedLocally) return;
+        if (!apiBaseUrl) {
+          showNotice("This hosted version saves assignments only in this browser. They are not shared or synced between devices.");
+          return;
+        }
+        if (!apiAvailable) {
+          showNotice("Python backend is offline. Changes are saved only in this browser for now; start the local API to sync them to SQLite.");
+          return;
+        }
+
+        saveQueue = saveQueue.then(async () => {
+          try {
+            await replaceServerAssignments(snapshot);
+            if (revision === localRevision) {
+              saveLocalAssignments(snapshot, false);
+              showNotice("Python backend connected. Assignments are stored in this device's local SQLite database; accounts and cloud sync are not set up yet.");
+            }
+          } catch (error) {
+            console.error("Unable to save assignments to the EduFlow Python API.", error);
+            apiAvailable = false;
+            showNotice("Could not reach the Python backend. Your latest changes are backed up in this browser and will sync when the API is available again.");
+          }
+        });
+      }
+
+      function readableDate(value, options) {
+        const date = new Date(`${value}T00:00:00`);
+        return Number.isNaN(date.getTime()) ? "Date unavailable" : new Intl.DateTimeFormat(undefined, options).format(date);
+      }
+
+      function dueLabel(value) {
+        if (value === dateKey(today)) return "Today";
+        if (value === offsetDate(1)) return "Tomorrow";
+        return readableDate(value, { weekday: "short", month: "short", day: "numeric" });
+      }
+
+      function escapeHtml(value) {
+        return value.replace(/[&<>"']/g, (character) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[character]);
+      }
+
+      function orderedAssignments(items) {
+        const sort = document.getElementById("sort-select").value;
+        return items.slice().sort((a, b) => {
+          if (sort === "priority") {
+            const ranks = { High: 0, Medium: 1, Low: 2 };
+            return ranks[a.priority] - ranks[b.priority] || a.dueDate.localeCompare(b.dueDate);
+          }
+          if (sort === "subject") return a.subject.localeCompare(b.subject) || a.dueDate.localeCompare(b.dueDate);
+          return a.dueDate.localeCompare(b.dueDate);
+        });
+      }
+
+      function renderTasks() {
+        const filtered = assignments.filter((item) =>
+          activeFilter === "all" || (activeFilter === "completed" ? item.completed : !item.completed));
+        const items = orderedAssignments(filtered);
+        taskList.innerHTML = items.map((item) => `
+          <article class="task-row ${item.completed ? "is-complete" : ""}">
+            <button class="check-button ${item.completed ? "checked" : ""}" type="button" data-action="toggle" data-id="${escapeHtml(item.id)}" aria-label="${item.completed ? "Mark incomplete" : "Mark complete"}: ${escapeHtml(item.title)}">${item.completed ? "✓" : ""}</button>
+            <div class="task-details"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subject)}</span></div>
+            <span class="priority priority-${escapeHtml(item.priority.toLowerCase())}">${escapeHtml(item.priority)}</span>
+            <span class="task-due">${escapeHtml(dueLabel(item.dueDate))}</span>
+            <button class="delete-button" type="button" data-action="delete" data-id="${escapeHtml(item.id)}" aria-label="Delete ${escapeHtml(item.title)}">×</button>
+          </article>`).join("");
+        emptyState.hidden = items.length > 0;
+        taskList.hidden = items.length === 0;
+      }
+
+      function renderDeadlines() {
+        const upcoming = assignments.filter((item) => !item.completed && item.dueDate >= dateKey(today))
+          .sort((a, b) => a.dueDate.localeCompare(b.dueDate)).slice(0, 3);
+        deadlineList.innerHTML = upcoming.length ? upcoming.map((item) => `
+          <div class="deadline-item">
+            <span class="deadline-date"><strong>${readableDate(item.dueDate, { day: "2-digit" })}</strong><small>${readableDate(item.dueDate, { month: "short" })}</small></span>
+            <span class="deadline-marker marker-${escapeHtml(item.subject.toLowerCase())}"></span>
+            <div class="deadline-details"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subject)}</span></div>
+            <span class="deadline-when">${escapeHtml(dueLabel(item.dueDate))}</span>
+          </div>`).join("") : '<p class="no-deadlines">No upcoming deadlines. Enjoy the breathing room!</p>';
+      }
+
+      function renderStats() {
+        const completed = assignments.filter((item) => item.completed).length;
+        const pending = assignments.length - completed;
+        const todayCount = assignments.filter((item) => !item.completed && item.dueDate === dateKey(today)).length;
+        const percent = assignments.length ? Math.round(completed / assignments.length * 100) : 0;
+        document.getElementById("due-today-count").textContent = todayCount;
+        document.getElementById("upcoming-count").textContent = pending;
+        document.getElementById("completed-count").textContent = completed;
+        document.getElementById("progress-percent").textContent = percent;
+        document.getElementById("progress-bar").style.width = `${percent}%`;
+        document.getElementById("donut-percent").textContent = `${percent}%`;
+        document.getElementById("progress-donut").style.setProperty("--progress", `${percent * 3.6}deg`);
+        document.getElementById("legend-completed").textContent = completed;
+        document.getElementById("legend-pending").textContent = pending;
+        document.getElementById("nav-task-count").textContent = pending;
+        document.getElementById("all-filter-count").textContent = assignments.length;
+      }
+
+      function renderWeek() {
+        const firstDay = new Date(today);
+        const mondayOffset = (firstDay.getDay() + 6) % 7;
+        firstDay.setDate(firstDay.getDate() - mondayOffset);
+        const days = Array.from({ length: 7 }, (_, index) => {
+          const date = new Date(firstDay);
+          date.setDate(firstDay.getDate() + index);
+          const key = dateKey(date);
+          const hasDeadline = assignments.some((item) => !item.completed && item.dueDate === key);
+          const isToday = key === dateKey(today);
+          return `<div class="week-day ${isToday ? "current-day" : ""} ${hasDeadline ? "has-deadline" : ""}">
+            <span>${readableDate(key, { weekday: "short" })}</span><strong>${readableDate(key, { day: "numeric" })}</strong>
+            <i aria-label="${hasDeadline ? "Assignment due" : "No assignments due"}"></i>
+          </div>`;
+        });
+        document.getElementById("week-strip").innerHTML = days.join("");
+      }
+
+      function render() {
+        renderStats();
+        renderTasks();
+        renderDeadlines();
+        renderWeek();
+      }
+
+      function setGmailStatus(message, isError) {
+        gmailStatus.textContent = message;
+        gmailStatus.classList.toggle("is-error", Boolean(isError));
+      }
+
+      function setGmailConnected(connected) {
+        document.getElementById("gmail-connect").hidden = connected;
+        document.getElementById("gmail-refresh").hidden = !connected;
+        document.getElementById("gmail-disconnect").hidden = !connected;
+        gmailClientInput.disabled = connected;
+      }
+
+      function loadGoogleIdentityScript() {
+        if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+          return Promise.resolve();
+        }
+        if (googleIdentityScriptPromise) return googleIdentityScriptPromise;
+        googleIdentityScriptPromise = new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://accounts.google.com/gsi/client";
+          script.async = true;
+          script.defer = true;
+          script.onload = () => {
+            if (window.google && window.google.accounts && window.google.accounts.oauth2) resolve();
+            else reject(new Error("Google sign-in did not initialize."));
+          };
+          script.onerror = () => reject(new Error("Google sign-in could not be loaded. Check your internet connection."));
+          document.head.appendChild(script);
+        }).catch((error) => {
+          googleIdentityScriptPromise = null;
+          throw error;
+        });
+        return googleIdentityScriptPromise;
+      }
+
+      function getClientId() {
+        return gmailClientInput.value.trim();
+      }
+
+      function saveGoogleClientId() {
+        const clientId = getClientId();
+        if (!/^\d+-[a-z0-9-]+\.apps\.googleusercontent\.com$/i.test(clientId)) {
+          setGmailStatus("Enter a valid OAuth Client ID ending in .apps.googleusercontent.com. Do not enter a client secret.", true);
+          gmailClientInput.focus();
+          return false;
+        }
+        try {
+          localStorage.setItem(gmailClientStorageKey, clientId);
+          return true;
+        } catch (error) {
+          console.error("Unable to save the public Google OAuth Client ID.", error);
+          setGmailStatus("Could not save the Client ID in this browser. Check browser storage settings.", true);
+          return false;
+        }
+      }
+
+      async function connectGmail() {
+        if (!saveGoogleClientId()) return;
+        setGmailStatus("Loading secure Google sign-in…", false);
+        try {
+          await loadGoogleIdentityScript();
+          const tokenClient = window.google.accounts.oauth2.initTokenClient({
+            client_id: getClientId(),
+            scope: gmailScope,
+            callback: (response) => {
+              if (response.error || !response.access_token) {
+                setGmailStatus(`Google sign-in failed: ${response.error_description || response.error || "No access token was returned."}`, true);
+                return;
+              }
+              gmailAccessToken = response.access_token;
+              gmailTokenExpiresAt = Date.now() + Number(response.expires_in || 3600) * 1000;
+              setGmailConnected(true);
+              setGmailStatus("Connected. Loading matching messages…", false);
+              loadGmailMessages();
+            },
+            error_callback: (error) => {
+              setGmailStatus(`Google sign-in failed: ${error.message || error.type || "Please try again."}`, true);
+            }
+          });
+          tokenClient.requestAccessToken({ prompt: "consent" });
+        } catch (error) {
+          console.error("Unable to start Google sign-in.", error);
+          setGmailStatus(error.message, true);
+        }
+      }
+
+      async function gmailApiRequest(url) {
+        if (!gmailAccessToken || Date.now() >= gmailTokenExpiresAt) {
+          throw new Error("Your Google access has expired. Connect Gmail again to continue.");
+        }
+        const response = await fetch(url, {
+          headers: { Authorization: `Bearer ${gmailAccessToken}` }
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          const apiMessage = data.error && data.error.message ? data.error.message : `Gmail API returned ${response.status}.`;
+          throw new Error(apiMessage);
+        }
+        return data;
+      }
+
+      async function loadGmailMessages() {
+        document.getElementById("gmail-refresh").disabled = true;
+        gmailMessages.innerHTML = '<p class="gmail-loading">Loading messages…</p>';
+        try {
+          const listUrl = new URL("https://gmail.googleapis.com/gmail/v1/users/me/messages");
+          listUrl.searchParams.set("q", gmailQuery);
+          listUrl.searchParams.set("maxResults", "8");
+          const list = await gmailApiRequest(listUrl);
+          const messages = list.messages || [];
+          if (!messages.length) {
+            gmailMessages.innerHTML = '<p class="gmail-empty">No matching school-related email found in the last 30 days.</p>';
+            setGmailStatus("Connected to Gmail · Read-only", false);
+            return;
+          }
+          const details = await Promise.all(messages.map(async (message) => {
+            const url = new URL(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(message.id)}`);
+            url.searchParams.set("format", "metadata");
+            url.searchParams.append("metadataHeaders", "From");
+            url.searchParams.append("metadataHeaders", "Subject");
+            url.searchParams.append("metadataHeaders", "Date");
+            return gmailApiRequest(url);
+          }));
+          gmailMessages.innerHTML = details.map((message) => {
+            const headers = message.payload && message.payload.headers ? message.payload.headers : [];
+            const headerValue = (name) => {
+              const header = headers.find((item) => item.name.toLowerCase() === name.toLowerCase());
+              return header ? header.value : "";
+            };
+            return `<article class="gmail-message">
+              <div class="gmail-message-top"><strong>${escapeHtml(headerValue("From") || "Unknown sender")}</strong><span>${escapeHtml(headerValue("Date") ? readableEmailDate(headerValue("Date")) : "")}</span></div>
+              <h3>${escapeHtml(headerValue("Subject") || "(No subject)")}</h3>
+              <p>${escapeHtml(message.snippet || "")}</p>
+            </article>`;
+          }).join("");
+          setGmailStatus(`Connected to Gmail · ${details.length} message${details.length === 1 ? "" : "s"} · Read-only`, false);
+        } catch (error) {
+          console.error("Unable to read Gmail messages.", error);
+          gmailMessages.innerHTML = "";
+          setGmailStatus(`Could not load Gmail messages: ${error.message}`, true);
+          if (!gmailAccessToken || Date.now() >= gmailTokenExpiresAt) {
+            setGmailConnected(false);
+            gmailAccessToken = "";
+          }
+        } finally {
+          document.getElementById("gmail-refresh").disabled = false;
+        }
+      }
+
+      function readableEmailDate(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? "" : new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(date);
+      }
+
+      function disconnectGmail() {
+        const tokenToRevoke = gmailAccessToken;
+        gmailAccessToken = "";
+        gmailTokenExpiresAt = 0;
+        gmailMessages.innerHTML = "";
+        setGmailConnected(false);
+        setGmailStatus("Disconnected. Your access token has been cleared from this page.", false);
+        if (tokenToRevoke && window.google && window.google.accounts && window.google.accounts.oauth2) {
+          window.google.accounts.oauth2.revoke(tokenToRevoke, (response) => {
+            if (response.error) {
+              console.error("Google did not revoke the Gmail token.", response.error);
+              setGmailStatus("Disconnected on this page, but Google could not revoke the token. Review connected apps in your Google Account.", true);
+            }
+          });
+        }
+      }
+
+      document.getElementById("today-label").textContent = readableDate(dateKey(today), { weekday: "long", month: "long", day: "numeric" });
+      document.querySelectorAll(".filter-tab").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeFilter = button.dataset.filter;
+          document.querySelectorAll(".filter-tab").forEach((tab) => tab.classList.toggle("selected", tab === button));
+          renderTasks();
+        });
+      });
+      document.getElementById("sort-select").addEventListener("change", renderTasks);
+      taskList.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const index = assignments.findIndex((item) => item.id === button.dataset.id);
+        if (index < 0) return;
+        if (button.dataset.action === "toggle") assignments[index].completed = !assignments[index].completed;
+        if (button.dataset.action === "delete") assignments.splice(index, 1);
+        saveAssignments();
+        render();
+      });
+      function openDialog() {
+        document.getElementById("form-error").textContent = "";
+        const dateInput = document.getElementById("assignment-due");
+        dateInput.min = dateKey(today);
+        dateInput.value = offsetDate(1);
+        dialog.showModal();
+        document.getElementById("assignment-title").focus();
+      }
+      document.getElementById("add-assignment-button").addEventListener("click", openDialog);
+      document.getElementById("empty-add-button").addEventListener("click", openDialog);
+      document.getElementById("close-dialog").addEventListener("click", () => dialog.close());
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const title = String(data.get("title") || "").trim();
+        const dueDate = String(data.get("dueDate") || "");
+        if (!title || dueDate < dateKey(today)) {
+          document.getElementById("form-error").textContent = "Enter a title and choose today or a future due date.";
+          return;
+        }
+        assignments.push({
+          id: window.crypto && typeof window.crypto.randomUUID === "function" ? window.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+          title,
+          subject: String(data.get("subject")),
+          dueDate,
+          priority: String(data.get("priority")),
+          completed: false
+        });
+        saveAssignments();
+        render();
+        form.reset();
+        dialog.close();
+      });
+
+      document.getElementById("gmail-connect").addEventListener("click", connectGmail);
+      document.getElementById("gmail-refresh").addEventListener("click", loadGmailMessages);
+      document.getElementById("gmail-disconnect").addEventListener("click", disconnectGmail);
+      try {
+        gmailClientInput.value = localStorage.getItem(gmailClientStorageKey) || "";
+      } catch (error) {
+        console.error("Unable to read the public Google OAuth Client ID.", error);
+        setGmailStatus("Browser storage is unavailable. Enter the Client ID again when connecting.", true);
+      }
+
+      loadAssignments().then(render);
+    }());
+  </script>
+</body>
+</html>
